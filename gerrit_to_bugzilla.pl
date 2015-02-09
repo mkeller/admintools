@@ -15,7 +15,7 @@
 $hostname = `hostname`;
 $hostname =~ s/\n//;
 
-my $basepath = "/home/data/httpd/writable/bugs.eclipse.org/gerrit_to_bugzilla";
+my $basepath = "/path/to/tempdir";
 my $logfile = $basepath . "/gerrit_to_bugzilla.log";
 my $cgit_base = "http://git.eclipse.org/c/";
 
