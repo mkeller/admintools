@@ -12,10 +12,19 @@
 #*******************************************************************************/
 
 # Use this script to process incoming Gerrit change emails, post to Bugzilla
+# Your alias file could look like this:
+# gerrit:          root,"|/path/to/gerrit_to_bugzilla.pl"
+# 
+#
+# The output will be a file compatible with Bugzilla's email_in.pl interface
+# If your mail and Bugzilla servers are on the same host, you can probably
+# omit the creation of temp files and instead pipe directly to email_in.pl
+
+
 $hostname = `hostname`;
 $hostname =~ s/\n//;
 
-my $basepath = "/path/to/tempdir";
+my $basepath = "/path/to/temp/gerrit_to_bugzilla";
 my $logfile = $basepath . "/gerrit_to_bugzilla.log";
 my $cgit_base = "http://git.eclipse.org/c/";
 
@@ -128,6 +137,7 @@ if($bug_id > 0 && ($message_type eq "newchange" || $message_type eq "merged" || 
 
 	$bug_email .= "";
 	
+	# Send to STDOUT if you with to pipe it directly to email_in.pl
 	my $bugzilla_email_file	= $basepath . "/bugmail.bug$bug_id.$$.txt"; 
 	open(FILE,">$bugzilla_email_file") || die("Cannot Open bugzilla email file");
 	print FILE $bug_email;
