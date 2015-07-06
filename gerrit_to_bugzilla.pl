@@ -41,8 +41,7 @@ my $commit_id = "";
 my $gerrit_project = "";
 my $gerrit_branch = "";
 my $bug_id = 0;
-my $submitter = "";
-my $owner = "";
+my $from_name = "";
 
 
 
@@ -114,11 +113,8 @@ while (<STDIN>) {
         if($_ =~ m/^Gerrit-Branch: ([a-zA-Z0-9\/\._-]+)/) {
                 $gerrit_branch = $1;
         }
-        if($_ =~ m/^(.+) has submitted this change and it was merged\.$/) {
-                $submitter = $1;
-        }
-        if($_ =~ m/^Gerrit-Owner: (.+)$/) {
-                $owner = $1;
+        if($_ =~ m/^From: "(.+) \(Code Review\)" <gerrit@eclipse\.org>$/) {
+                $from_name = $1;
         }
 }
 
@@ -133,13 +129,13 @@ if($bug_id > 0 && ($message_type eq "newchange" || $message_type eq "merged" || 
 	
 	if($message_type eq "newchange") {
 		$bug_email .= "\n";
-		$bug_email .= "$owner created new Gerrit change: $change_url\n";
+		$bug_email .= "$from_name created new Gerrit change: $change_url\n";
 	}
 	if($message_type eq "merged") {
 		my $cgit_url = $cgit_base . $gerrit_project . ".git/commit/?id=" . $commit_id;
 		$bug_email .= "\@see_also = $cgit_url\n";
 		$bug_email .= "\n";
-		$bug_email .= "$submitter merged Gerrit change $change_url to [$gerrit_branch].\n";
+		$bug_email .= "$from_name merged Gerrit change $change_url to [$gerrit_branch].\n";
 		$bug_email .= "Commit: $cgit_url\n";
 	}
 	if($message_type eq "newpatchset") {
