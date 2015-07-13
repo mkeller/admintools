@@ -106,7 +106,7 @@ while (<STDIN>) {
         if($subject =~ m/([Bb]ug:?\s*#?)(\d+)/) {
                 $bug_id = $2;
         }
-        if($_ =~ m#^Bug: (?:https://bugs\.\w+\.org/(?:bugs/show_bug\.cgi\?id=)?)?(\d+)#) {
+        if($_ =~ m#^(?:Bug|Task-Url): (?:https://bugs\.\w+\.org/(?:bugs/show_bug\.cgi\?id=)?)?(\d+)#) {
                 $bug_id = $1;
         }
         if($_ =~ m/^Gerrit-Branch: ([a-zA-Z0-9\/\._-]+)/) {
